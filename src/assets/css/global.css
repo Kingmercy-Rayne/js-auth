@@ -1,4 +1,10 @@
 :root {
+  --primary-color: #051024;
+  --text-color-primary: #ccc;
+  --text-color-alt: #f2532b;
+  --text-color-tri: #444;
+  --button-background-color: #f2532b;
+  --button-background-alt: transparent;
   font-size: calc(0.6em+1vw);
 }
 * {
