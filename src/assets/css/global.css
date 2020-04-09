@@ -1,13 +1,19 @@
 :root {
   --primary-color: #051024;
-  --text-color-primary: #ccc;
+  --color-tetradic: #06b7e0;
+  --text-color-primary: #eee;
   --text-color-alt: #f2532b;
-  --text-color-tri: #444;
+  --text-color-tri: #777;
+  --border-color: #777;
+  --border-color-alt: #f2532b;
   --button-background-color: #f2532b;
   --button-background-alt: transparent;
   font-size: calc(0.6em+1vw);
 }
-* {
+
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;

@@ -1,0 +1,49 @@
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2em;
+
+    .input--group {
+        flex-basis: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 0.1em;
+        padding: 0.8em;
+    }
+
+    label {
+        align-self: flex-start;
+        color: var(--text-color-primary);
+        opacity: 0.75;
+        // padding: 0 0.4em;
+    }
+
+    input[type='text'], input[type='email'], input[type='password'] {
+        color: var(--text-color-primary);
+        width: 100%;
+        background: none;
+        border: none;
+        border-bottom: solid thin var(--border-color);
+        font-size: 1.2rem;
+        margin: 0.2em 0;
+        padding: 0.3rem 0;
+    }
+
+    input[type='password'] {
+        padding: 0.2em;
+        letter-spacing: 0.2em;
+    }
+
+    input:disabled {
+        visibility: hidden;
+    }
+
+    input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, input:-webkit-autofill:active {
+        -webkit-transition: 'color 9999s ease-out, background-color 9999s ease-out';
+        -webkit-transition-delay: 9999s;
+    }
+}

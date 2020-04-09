@@ -5,3 +5,9 @@ export default {
   name: 'Home',
 };
 </script>
+
+<style lang="stylus" scoped>
+h1 {
+  color: yellow !important;
+}
+</style>

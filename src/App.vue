@@ -23,8 +23,12 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   min-height: 100vh;
-  border: solid thin crimson;
+  color: var(--text-color-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: var(--primary-color);
 }
 </style>
