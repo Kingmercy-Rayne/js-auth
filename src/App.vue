@@ -29,6 +29,7 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  font-size: calc(0.1em + 1vw);
   background: var(--primary-color);
 }
 </style>

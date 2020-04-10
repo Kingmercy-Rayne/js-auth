@@ -45,9 +45,12 @@
           />
         </span>
         <span class="input--group">
-          <label for="confirmpassword">Confirm Password</label>
+          <label v-show="newUser.password.length >= 6" for="confirmpassword"
+            >Confirm Password</label
+          >
           <input
             :disabled="newUser.password.length < 6"
+            v-show="newUser.password.length >= 6"
             v-model="newUser.confirmPassword"
             autocomplete="false"
             required
@@ -56,26 +59,89 @@
             id=""
           />
         </span>
-        <button type="submit">Sign up</button>
+        <button @click.prevent="attemptRegistration" type="submit">
+          Sign up
+        </button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import Joi from '@hapi/joi';
+
+const registerSchema = Joi.object().keys({
+  firstName: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+  username: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(30)
+    .required(),
+  password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+  email: Joi.string().email({
+    minDomainSegments: 2,
+    tlds: {
+      allow: ['com', 'net', 'co.uk', 'io', 'tech'],
+    },
+  }),
+});
+
 export default {
   data() {
     return {
       newUser: {
         firstName: '',
         username: '',
-        userClass: '',
         email: '',
-        emailConfirm: '',
         password: '',
         confirmPassword: '',
       },
     };
+  },
+  methods: {
+    attemptRegistration() {
+      const {
+        firstName,
+        username,
+        email,
+        password,
+        confirmPassword,
+      } = this.newUser;
+      if (firstName && username && email && password && confirmPassword) {
+        if (password === confirmPassword) {
+          const URL = 'http://localhost:1337/auth/register';
+          const processedUserProfile = {
+            firstName,
+            username,
+            email,
+            password,
+          };
+          registerSchema
+            .validateAsync(processedUserProfile)
+            .then((validatedUser) => {
+              fetch(URL, {
+                method: 'POST',
+                headers: {
+                  'Content-type': 'application/json',
+                },
+                body: JSON.stringify(validatedUser),
+              })
+                .then((res) => res.json())
+                .then((data) => console.log(data))
+                .catch((err) => console.log(err));
+            })
+            .catch((err) => console.log(err));
+        } else {
+          console.log('Passwords do not match');
+        }
+      } else {
+        console.log('all fields are required');
+      }
+    },
   },
 };
 </script>
@@ -94,8 +160,14 @@ export default {
 
 .container {
   width: 45%;
-  // border: solid thin var(--border-color-alt);
   padding: 1em 2.2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  @media screen and (max-width: 800px) {
+    width: 100%;
+  }
 
   > h1 {
     padding: 0.5em;
