@@ -1,3 +1,48 @@
+.container {
+    width: 45%;
+    padding: 1em 2.2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
+    @media screen and (max-width: 800px) {
+        width: 100%;
+    }
+
+    > h1 {
+        padding: 0.5em;
+        position: relative;
+    }
+
+    >h1::before {
+        content: '';
+        border-bottom: solid thin var(--border-color-alt);
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 0;
+        padding: 1em;
+        width: 2rem;
+        height: 100%;
+    }
+
+    h4 {
+        font-size: 0.8rem;
+        padding: 1em;
+        color: var(--text-color-tri);
+    }
+
+    button[type='submit'] {
+        background: none;
+        font-size: 1.2rem;
+        color: var(--text-color-primary);
+        background: var(--button-background-color);
+        border: solid thin var(--border-color-alt);
+        padding: 0.6em 3em;
+        border-radius: 0.2rem;
+    }
+}
+
 form {
     display: flex;
     flex-direction: column;

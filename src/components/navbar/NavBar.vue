@@ -56,10 +56,14 @@ export default {
     cursor: pointer;
     display: flex;
     margin: 0.2em 1em;
-    padding: 1.2em;
+    padding: 1.2em 1.6em;
     position: relative;
-    border: solid thin var(--border-color-alt);
-    border-radius: 1em;
+
+    &:nth-child(2) {
+      padding: 1.2em 3em;
+      border: solid thin var(--color-tetradic);
+      border-radius: 0.8em;
+    }
   }
 }
 </style>

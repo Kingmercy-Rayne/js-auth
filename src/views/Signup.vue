@@ -1,64 +1,45 @@
 <template>
-  <div class="register__view">
+  <div class="signup__view">
     <div class="container">
       <h1>Welcome</h1>
       <h4>Join today and enjoy access to great content</h4>
       <form method="post">
-        <span class="input--group">
-          <label for="firstname">First Name</label>
-          <input
-            v-model="newUser.firstName"
-            type="text"
-            name="firstname"
-            id=""
-          />
-        </span>
-        <span class="input--group">
-          <label for="email">Email</label>
-          <input
-            v-model="newUser.email"
-            required
-            type="email"
-            name="email"
-            id=""
-          />
-        </span>
-        <span class="input--group">
-          <label for="username">Username</label>
-          <input
-            v-model="newUser.username"
-            required
-            type="text"
-            name="username"
-            id=""
-          />
-        </span>
-        <span class="input--group">
-          <label for="password">Password</label>
-          <input
-            v-model="newUser.password"
-            autocomplete="false"
-            required
-            type="password"
-            name="password"
-            id=""
-          />
-        </span>
-        <span class="input--group">
-          <label v-show="newUser.password.length >= 6" for="confirmpassword"
-            >Confirm Password</label
-          >
-          <input
-            :disabled="newUser.password.length < 6"
-            v-show="newUser.password.length >= 6"
-            v-model="newUser.confirmPassword"
-            autocomplete="false"
-            required
-            type="password"
-            name="password"
-            id=""
-          />
-        </span>
+        <Input--Base
+          @updateValue="(value) => (newUser.firstName = value)"
+          type="text"
+          id="firstName"
+          label="First Name"
+          autocomplete="true"
+        />
+        <Input--Base
+          @updateValue="(value) => (newUser.email = value)"
+          type="email"
+          id="email"
+          label="Email"
+          autocomplete="true"
+        />
+        <Input--Base
+          @updateValue="(value) => (newUser.username = value)"
+          type="text"
+          id="username"
+          label="Username"
+          autocomplete="true"
+        />
+        <Input--Base
+          @updateValue="(value) => (newUser.password = value)"
+          type="password"
+          id="password"
+          label="Password"
+          autocomplete="false"
+        />
+        <Input--Base
+          @updateValue="(value) => (newUser.confirmPassword = value)"
+          type="password"
+          id="confirmpassword"
+          label="Confirm Password"
+          autocomplete="false"
+          v-if="newUser.password.length >= 6"
+        />
         <button @click.prevent="attemptRegistration" type="submit">
           Sign up
         </button>
@@ -69,6 +50,7 @@
 
 <script>
 import Joi from '@hapi/joi';
+import InputBase from '../components/registration_base/Input_Base.vue';
 
 const registerSchema = Joi.object().keys({
   firstName: Joi.string()
@@ -91,6 +73,9 @@ const registerSchema = Joi.object().keys({
 });
 
 export default {
+  components: {
+    'Input--Base': InputBase,
+  },
   data() {
     return {
       newUser: {
@@ -113,7 +98,7 @@ export default {
       } = this.newUser;
       if (firstName && username && email && password && confirmPassword) {
         if (password === confirmPassword) {
-          const URL = 'http://localhost:1337/auth/register';
+          const URL = 'http://localhost:1337/auth/signup';
           const processedUserProfile = {
             firstName,
             username,
@@ -131,7 +116,10 @@ export default {
                 body: JSON.stringify(validatedUser),
               })
                 .then((res) => res.json())
-                .then((data) => console.log(data))
+                .then((data) => {
+                  localStorage.setItem('user', JSON.stringify(data.addedUser));
+                  localStorage.setItem('token', data.token);
+                })
                 .catch((err) => console.log(err));
             })
             .catch((err) => console.log(err));
@@ -149,57 +137,12 @@ export default {
 <style lang="stylus" scoped>
 @import '../assets/css/registration_form.styl';
 
-.register__view {
+.signup__view {
   min-height: 75vh;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   // border: solid thin yellow;
-}
-
-.container {
-  width: 45%;
-  padding: 1em 2.2em;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-
-  @media screen and (max-width: 800px) {
-    width: 100%;
-  }
-
-  > h1 {
-    padding: 0.5em;
-    position: relative;
-  }
-
-  >h1::before {
-    content: '';
-    border-bottom: solid thin var(--border-color-alt);
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 0;
-    padding: 1em;
-    width: 2rem;
-    height: 100%;
-  }
-
-  h4 {
-    font-size: 0.8rem;
-    padding: 1em;
-    color: var(--text-color-tri);
-  }
-
-  button[type='submit'] {
-    background: none;
-    font-size: 1.2rem;
-    color: var(--text-color-primary);
-    background: var(--button-background-color);
-    border: solid thin var(--border-color-alt);
-    padding: 0.6em 3em;
-    border-radius: 0.2rem;
-  }
 }
 </style>
