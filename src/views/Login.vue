@@ -5,11 +5,11 @@
       <h4>Join today and enjoy access to great content</h4>
       <form method="post">
         <Input--Base
-          @updateValue="(value) => (loginCredentials.email = value)"
-          type="email"
-          id="email"
-          label="Email"
-          autocomplete="true"
+          @updateValue="(value) => (loginCredentials.username = value)"
+          type="text"
+          id="username"
+          label="Username"
+          autocomplete="false"
         />
         <Input--Base
           @updateValue="(value) => (loginCredentials.password = value)"
@@ -31,12 +31,11 @@ import Joi from '@hapi/joi';
 import InputBase from '../components/registration_base/Input_Base.vue';
 
 const loginSchema = Joi.object().keys({
-  email: Joi.string().email({
-    minDomainSegments: 2,
-    tlds: {
-      allow: ['com', 'net', 'co.uk', 'io', 'tech'],
-    },
-  }),
+  username: Joi.string()
+    .alphanum()
+    .min(3)
+    .max(50)
+    .required(),
   password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
 });
 
@@ -47,29 +46,18 @@ export default {
   data() {
     return {
       loginCredentials: {
-        email: '',
+        username: '',
         password: '',
       },
     };
   },
   methods: {
     attemptLogin() {
-      if (this.loginCredentials.email && this.loginCredentials.password) {
-        const URL = 'http://localhost:1337/auth/login';
+      if (this.loginCredentials.username && this.loginCredentials.password) {
         loginSchema
           .validateAsync(this.loginCredentials)
           .then((validatedCredentials) => {
-            console.log('trying to send req');
-            fetch(URL, {
-              method: 'POST',
-              headers: {
-                'Content-type': 'application/json',
-              },
-              body: JSON.stringify(validatedCredentials),
-            })
-              .then((res) => res.json())
-              .then((data) => console.log(data))
-              .catch((err) => console.log(err));
+            this.$store.dispatch('attemptLogin_ACTION', validatedCredentials);
           })
           .catch((err) => console.log(err));
       } else {
